@@ -125,7 +125,22 @@ namespace libgp {
     update_k_star(x_star);
     int n = sampleset->size();
     Eigen::VectorXd v = L.topLeftCorner(n, n).triangularView<Eigen::Lower>().solve(k_star);
-    return cf->get(x_star, x_star) - v.dot(v);	
+    return cf->get(x_star, x_star) - v.dot(v);
+  }
+
+  void GaussianProcess::f_and_var(const double x[], double & f, double & var)
+  {
+    if (sampleset->empty()) return;
+    Eigen::Map<const Eigen::VectorXd> x_star(x, input_dim);
+    compute();
+    update_alpha();
+    update_k_star(x_star);
+
+    f = k_star.dot(alpha);
+
+    int n = sampleset->size();
+    Eigen::VectorXd v = L.topLeftCorner(n, n).triangularView<Eigen::Lower>().solve(k_star);
+    var = cf->get(x_star, x_star) - v.dot(v);
   }
 
   void GaussianProcess::compute()

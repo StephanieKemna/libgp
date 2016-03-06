@@ -57,6 +57,11 @@ namespace libgp {
      *  @return predicted variance */
     virtual double var(const double x[]);
     
+    /** Predict target value and variance for given input
+     *  @param x input vector
+     *  @return predicted value and variance (by reference) */
+    virtual void f_and_var(const double x[], double & f, double & var);
+
     /** Add input-output-pair to sample set.
      *  Add a copy of the given input-output-pair to sample set.
      *  @param x input array
